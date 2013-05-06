@@ -13,16 +13,20 @@ There is no warranty of any kind that the source will perform according to any s
 You as user are fully responsible for analysing the code and deciding if and how to use it.
 
 
-=Configuration:=
+Configuration:
+---
 
 constants in file background.js:
 
-MaxHoursToKeep - how many bars are kept in history to calculate EMA trends
-btcOffset - amount of BTC that shouldn't be touched by trade (all amount above that will be used) 
-btcFiat - replace with Your currency
+	**MaxHoursToKeep** - how many bars are kept in history to calculate EMA trends
+
+	**btcOffset** - amount of BTC that shouldn't be touched by trade (all amount above that will be used)
+ 
+	**btcFiat** - replace with Your currency
 
 
-=Installation:=
+Installation:
+---
 
 1. Copy files from github to Your local storage.
 2. Configure background.js according to above specs
