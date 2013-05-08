@@ -6,7 +6,11 @@ Gox Trading Bot Chrome Extension
 <img src="http://i39.tinypic.com/34sf8rn.jpg"/>
 
 
-This work is based on Gox Trading Bot (https://chrome.google.com/webstore/detail/gox-trading-bot/iejmifigokhpcgpmoacllcdiceicmejb)
+This work is based on:
+
+ - Gox Trading Bot (https://chrome.google.com/webstore/detail/gox-trading-bot/iejmifigokhpcgpmoacllcdiceicmejb)
+ - Discussion thread (https://bitcointalk.org/index.php?topic=67591.0)
+ - Base idea (https://bitcointalk.org/index.php?topic=60501) 
 
 The code was provided for educational/fun purposes and shouldn't be used to trade significant amounts of BTC.
 
