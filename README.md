@@ -23,8 +23,12 @@ constants in file background.js:
 	**btcOffset** - amount of BTC that shouldn't be touched by trade (all amount above that will be used)
  
 	**btcFiat** - replace with Your currency
+	
+	**hrInterval** - number of seconds between "ticks" (ie 3600 - one hour)
+	
+	**bidWithLastPrice** - bid with last price rather than market price
 
-
+	
 Installation:
 ---
 
@@ -32,3 +36,14 @@ Installation:
 2. Configure background.js according to above specs
 3. Run Chrome and goto "chrome://extensions/" url
 4. Click on "Read extension without package" and choose Your local folder
+
+
+Changes:
+---
+
+0.2.0.2 
+- added chart with trends (a link from popup near balance)
+- added **hrInterval**
+- option to bid with last price rather than market price ()
+- different thresholds buy/sell
+- other minor fixes

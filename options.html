@@ -28,6 +28,7 @@ sup {
 }
 </style>
 <table border="0" width="400"><tr><td>
+See <a href="chart.html" target="_blank">chart</a>.
 <i>
 Read <a href="https://bitcointalk.org/index.php?topic=60501" target="_blank">Goomboo's Journal</a>
 to learn about the strategy used by this trading bot.<br>
@@ -56,7 +57,8 @@ The bot uses the first traded price of each hour for the EMA input.
 	<table width="100%"><tr>
 		<td align="center">EMA(<input type="text" size="2" maxlength="2" id="emas" class="mono r">)</td>
 		<td align="center">EMA(<input type="text" size="2" maxlength="2" id="emal" class="mono r">)</td>
-		<td align="center">Treshold=<input type="text" size="4" maxlength="4" id="tras" class="mono r">%<sup> 2</sup></td>
+		<td align="center">sellTreshold=<input type="text" size="4" maxlength="4" id="stras" class="mono r">%<sup> 2</sup></td>
+		<td align="center">buyTreshold=<input type="text" size="4" maxlength="4" id="btras" class="mono r">%<sup> 2</sup></td>
 		<td align="center">Show last
 		<select id="sla">
 		<option value="6">6 hours</option>
@@ -94,7 +96,7 @@ The bot uses the first traded price of each hour for the EMA input.
  <sup>2</sup>
  The bot will buy or sell <u>all the bitcoins</u> at the given MtGox account
  when the absolute difference between two EMA values (expressed in %)
- holds above the <b>Threshold</b> for the last two ticks (hours).
+ holds above the <b>Threshold</b> for the last one tick (hours).
  </div>
 
  <hr><div class="note stat">

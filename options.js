@@ -5,17 +5,24 @@ var sla = document.getElementById("sla")
 function rese() {
 	document.getElementById("emas").value=10
 	document.getElementById("emal").value=21
-	document.getElementById("tras").value=0.25
+	document.getElementById("btras").value=0.25
+	document.getElementById("stras").value=0.25
 	sla.selectedIndex=1
 }
 
 function save() {
-	var tr = parseFloat(document.getElementById("tras").value)
-	if (isNaN(tr) || tr<0 || tr>10) {
-		alert("Wrong Treshold parameter")
+	var btr = parseFloat(document.getElementById("btras").value)
+	if (isNaN(tr) || btr<0 || btr>10) {
+		alert("Wrong buyTreshold parameter")
 		return
 	}
 
+	var str = parseFloat(document.getElementById("stras").value)
+	if (isNaN(str) || str<0 || str>10) {
+		alert("Wrong sellTreshold parameter")
+		return
+	}	
+	
 	var es = parseInt(document.getElementById("emas").value)
 	var el = parseInt(document.getElementById("emal").value)
 	if (isNaN(es) || isNaN(el)) {
@@ -46,7 +53,7 @@ function save() {
 		document.getElementById("emal").value=el
 	}
 
-	if (bp.EmaShortPar!=es || bp.EmaLongPar!=el || bp.MinThreshold!=tr) {
+	if (bp.EmaShortPar!=es || bp.EmaLongPar!=el || bp.MinThresholdBuy!=btr || bp.MinThresholdSell!=str) {
 		if (!confirm("Applying different EMA/Treshold values may case an instant trigger to execute a trade."))  return
 	}
 
@@ -58,7 +65,8 @@ function save() {
 
 	localStorage.EmaShortPar=bp.EmaShortPar=es
 	localStorage.EmaLongPar=bp.EmaLongPar=el
-	localStorage.MinThreshold=bp.MinThreshold=tr
+	localStorage.MinThreshold=bp.MinThresholdBuy=btr
+	localStorage.MinThreshold=bp.MinThresholdSell=str
 	bp.refreshEMA(true)
 }
 
@@ -67,7 +75,8 @@ function setfields() {
 	document.getElementById("apisec").value=bp.ApiSec
 	document.getElementById("emas").value=bp.EmaShortPar.toString()
 	document.getElementById("emal").value=bp.EmaLongPar.toString()
-	document.getElementById("tras").value=bp.MinThreshold.toFixed(2)
+	document.getElementById("btras").value=bp.MinThresholdBuy.toFixed(2)
+	document.getElementById("stras").value=bp.MinThresholdSell.toFixed(2)
 	for (var i=0; i<sla.options.length; i++) {
 		if (parseInt(sla.options[i].value)==bp.LogLines) {
 			sla.selectedIndex=i

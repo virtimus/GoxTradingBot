@@ -1,6 +1,8 @@
 const MaxHoursToKeep = 144;
 const btcOffset = 3.2; // this amount will be untouched by trade - bot will play with the rest
-const btcFiat = 'PLN'; // change this to Your currency 
+const btcFiat = 'USD'; // change this to Your currency 
+const hrInterval = 1800;// interval as number of seconds (ie 3600 - 1 hour)
+const bidWithLastPrice = false; // use last price to bid rather than market one
 
 var ApiKey = localStorage.ApiKey || '';
 var ApiSec = localStorage.ApiSec || '';
@@ -8,7 +10,8 @@ var ApiSec = localStorage.ApiSec || '';
 var EmaShortPar = parseInt(localStorage.EmaShortPar || 10);
 var EmaLongPar = parseInt(localStorage.EmaLongPar || 21);
 var MaxHoursBack = parseInt(localStorage.MaxHoursBack || MaxHoursToKeep);
-var MinThreshold = parseFloat(localStorage.MinThreshold || 0.25);
+var MinThresholdBuy = parseFloat(localStorage.MinThresholdBuy || 0.25);
+var MinThresholdSell = parseFloat(localStorage.MinThresholdSell || 0.25);
 var LogLines = parseInt(localStorage.LogLines || 12);
 
 var BTC, USD;
@@ -64,7 +67,7 @@ function update() {
 				console.log(e)
 				chrome.browserAction.setTitle({title: e.toString() });
 			}
-			schedupdate(15*60*1000) // Update balance every 15 minutes
+			schedupdate(5*60*1000) // Update balance every 5 minutes
 		}
 	)
 }
@@ -148,23 +151,27 @@ function refreshEMA(reset) {
 	var dp, dif = getemadif(H1.length-1)
 	chrome.browserAction.setBadgeText({text: Math.abs(dif).toFixed(2)})
 
-	if (dif>MinThreshold) {
+	if (dif>MinThresholdBuy) {
 		chrome.browserAction.setBadgeBackgroundColor({color:[0, 128, 0, 200]})
 		if (USD>=0.01) {
-			if (getemadif(H1.length-1) > MinThreshold) {
-				console.log("BUY!!!")
-				mtgoxpost("buyBTC.php", ['Currency='+btcFiat,'amount=1000'], one, onl)
+			if (getemadif(H1.length-1) > MinThresholdBuy) {
+				console.log("BUY!!!");
+				var inf = ['Currency='+btcFiat,'amount=1000'];
+				if (bidWithLastPrice) inf.push('price='+H1[H1.length-1].toString());
+				mtgoxpost("buyBTC.php", inf, one, onl)
 			}
 		} else {
 			console.log("No "+btcFiat+" to exec up-trend")
 		}
-	} else if (dif<-MinThreshold) {
+	} else if (dif<-MinThresholdSell) {
 		chrome.browserAction.setBadgeBackgroundColor({color:[128, 0, 0, 200]})
 		if (BTC>=btcOffset) {
 			var s = BTC - btcOffset;
-			if (getemadif(H1.length-1) < -MinThreshold) {
+			if (getemadif(H1.length-1) < -MinThresholdSell) {
 				console.log("SELL!!!")
-				mtgoxpost("sellBTC.php", ['Currency='+btcFiat,'amount='+s.toString()], one, onl)
+				var inf = ['Currency='+btcFiat,'amount='+s.toString()];
+				if (bidWithLastPrice) inf.push('price='+H1[H1.length-1].toString());
+				mtgoxpost("sellBTC.php", inf , one, onl)
 			}
 		} else {
 			console.log("No BTC to exec down-trend")
@@ -185,7 +192,7 @@ function updateH1() {
 	}
 	updateinprogress = true
 
-	var hour_fetch, hour_now = parseInt( (new Date()).getTime() / 3600000 )
+	var hour_fetch, hour_now = parseInt( (new Date()).getTime() / (hrInterval*1000) )
 	if (tim.length>0) {
 		hour_fetch = tim[tim.length-1] + 1
 		if (hour_fetch > hour_now) {
@@ -199,7 +206,7 @@ function updateH1() {
 
 	var req = new XMLHttpRequest()
 
-	var url = "https://data.mtgox.com/api/0/data/getTrades.php?Currency="+btcFiat+"&since="+(hour_fetch*3600*1000000).toString()
+	var url = "https://data.mtgox.com/api/0/data/getTrades.php?Currency="+btcFiat+"&since="+(hour_fetch*hrInterval*1000000).toString()
 
 	req.onerror = function(e) {
 		console.log("getTrades error", e, "-repeat")
@@ -223,7 +230,7 @@ function updateH1() {
 				H1.push(f)
 				hour_fetch++
 				if (hour_fetch <= hour_now) {
-					url = "https://data.mtgox.com/api/0/data/getTrades.php?Currency="+btcFiat+"&since="+(hour_fetch*3600*1000000).toString()
+					url = "https://data.mtgox.com/api/0/data/getTrades.php?Currency="+btcFiat+"&since="+(hour_fetch*hrInterval*1000000).toString()
 					get_url(req, url)
 					done = false
 					if (bootstrap) {
