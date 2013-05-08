@@ -1,7 +1,7 @@
 const MaxHoursToKeep = 144;
-const btcOffset = 3.2; // this amount will be untouched by trade - bot will play with the rest
+const btcOffset = 0; // this amount will be untouched by trade - bot will play with the rest
 const btcFiat = 'USD'; // change this to Your currency 
-// const hrInterval = 1800;// interval as number of seconds (ie 3600 - 1 hour)
+// const TimeFrame = 1800;// interval as number of seconds (ie 3600 - 1 hour)
 const bidWithLastPrice = false; // use last price to bid rather than market one
 
 var ApiKey = localStorage.ApiKey || '';

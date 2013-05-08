@@ -29,7 +29,7 @@ function refreshtable() {
 			   perc = 100 * (es-el) / ((es+el)/2)
 			}
 			var r=tab.insertRow(3)
-			var ti=new Date(bp.tim[i]*bp.hrInterval*1000)
+			var ti=new Date(bp.tim[i]*bp.TimeFrame*1000)
 				//   new Date(bp.tim[i]*3600*1000)
 			r.style.backgroundColor=bcols[((bp.tim[i]+1)/24)&1]
 			r.title=wds[ti.getDay()]
