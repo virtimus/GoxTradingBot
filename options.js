@@ -12,7 +12,7 @@ function rese() {
 
 function save() {
 	var btr = parseFloat(document.getElementById("btras").value)
-	if (isNaN(tr) || btr<0 || btr>10) {
+	if (isNaN(btr) || btr<0 || btr>10) {
 		alert("Wrong buyTreshold parameter")
 		return
 	}
