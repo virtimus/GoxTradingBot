@@ -16,7 +16,8 @@ This work is based on:
 
 Neither original author nor modifiers of the code are to be responsible for any damage caused by using this bot.
 There is no warranty of any kind that the source will perform according to any specification/expectations. 
-You as user are fully responsible for analysing the code and deciding if and how to use it.
+
+**You as user are fully responsible for analysing the code and deciding if and how to use it.**
 
 
 Configuration:
