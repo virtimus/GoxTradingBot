@@ -1,7 +1,7 @@
 const MaxHoursToKeep = 144;
 const btcOffset = 3.2; // this amount will be untouched by trade - bot will play with the rest
 const btcFiat = 'USD'; // change this to Your currency 
-const hrInterval = 1800;// interval as number of seconds (ie 3600 - 1 hour)
+// const hrInterval = 1800;// interval as number of seconds (ie 3600 - 1 hour)
 const bidWithLastPrice = false; // use last price to bid rather than market one
 
 var ApiKey = localStorage.ApiKey || '';
@@ -13,6 +13,7 @@ var MaxHoursBack = parseInt(localStorage.MaxHoursBack || MaxHoursToKeep);
 var MinThresholdBuy = parseFloat(localStorage.MinThresholdBuy || 0.25);
 var MinThresholdSell = parseFloat(localStorage.MinThresholdSell || 0.25);
 var LogLines = parseInt(localStorage.LogLines || 12);
+var TimeFrame = parseInt(localStorage.TimeFrame || 3600);
 
 var BTC, USD;
 var utimer=null;
@@ -192,7 +193,7 @@ function updateH1() {
 	}
 	updateinprogress = true
 
-	var hour_fetch, hour_now = parseInt( (new Date()).getTime() / (hrInterval*1000) )
+	var hour_fetch, hour_now = parseInt( (new Date()).getTime() / (TimeFrame*1000) )
 	if (tim.length>0) {
 		hour_fetch = tim[tim.length-1] + 1
 		if (hour_fetch > hour_now) {
@@ -206,7 +207,7 @@ function updateH1() {
 
 	var req = new XMLHttpRequest()
 
-	var url = "https://data.mtgox.com/api/0/data/getTrades.php?Currency="+btcFiat+"&since="+(hour_fetch*hrInterval*1000000).toString()
+	var url = "https://data.mtgox.com/api/0/data/getTrades.php?Currency="+btcFiat+"&since="+(hour_fetch*TimeFrame*1000000).toString()
 
 	req.onerror = function(e) {
 		console.log("getTrades error", e, "-repeat")
@@ -230,7 +231,7 @@ function updateH1() {
 				H1.push(f)
 				hour_fetch++
 				if (hour_fetch <= hour_now) {
-					url = "https://data.mtgox.com/api/0/data/getTrades.php?Currency="+btcFiat+"&since="+(hour_fetch*hrInterval*1000000).toString()
+					url = "https://data.mtgox.com/api/0/data/getTrades.php?Currency="+btcFiat+"&since="+(hour_fetch*TimeFrame*1000000).toString()
 					get_url(req, url)
 					done = false
 					if (bootstrap) {

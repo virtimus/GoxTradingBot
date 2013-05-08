@@ -1,6 +1,7 @@
 
 var bp = chrome.extension.getBackgroundPage()
 var sla = document.getElementById("sla")
+var tf = document.getElementById("tf")
 
 function rese() {
 	document.getElementById("emas").value=10
@@ -8,6 +9,7 @@ function rese() {
 	document.getElementById("btras").value=0.25
 	document.getElementById("stras").value=0.25
 	sla.selectedIndex=1
+	tf.selectedIndex=1
 }
 
 function save() {
@@ -62,6 +64,7 @@ function save() {
 	bp.schedupdate(10)
 
 	localStorage.LogLines=bp.LogLines=parseInt(sla.value)
+	localStorage.TimeFrame=bp.TimeFrame=parseInt(tf.value)
 
 	localStorage.EmaShortPar=bp.EmaShortPar=es
 	localStorage.EmaLongPar=bp.EmaLongPar=el
@@ -80,6 +83,12 @@ function setfields() {
 	for (var i=0; i<sla.options.length; i++) {
 		if (parseInt(sla.options[i].value)==bp.LogLines) {
 			sla.selectedIndex=i
+			break
+		}
+	}
+	for (var i=0; i<tf.options.length; i++) {
+		if (parseInt(tf.options[i].value)==bp.TimeFrame) {
+			tf.selectedIndex=i
 			break
 		}
 	}
