@@ -12,7 +12,7 @@ This work is based on:
  - Discussion thread (https://bitcointalk.org/index.php?topic=67591.0)
  - Base idea (https://bitcointalk.org/index.php?topic=60501) 
 
-The code was provided for educational/fun purposes and shouldn't be used to trade significant amounts of BTC.
+**The code was provided for educational/fun purposes and shouldn't be used to trade significant amounts of BTC!**
 
 Neither original author nor modifiers of the code are to be responsible for any damage caused by using this bot.
 There is no warranty of any kind that the source will perform according to any specification/expectations. 
