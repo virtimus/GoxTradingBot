@@ -1,3 +1,4 @@
+
 <style>
 table.top {
 	border-style:solid;
@@ -119,3 +120,118 @@ The bot uses the first traded price of each hour for the EMA input.
 </table>
 
 <script src="options.js"></script>
+=======
+<style>
+table.top {
+	border-style:solid;
+	padding: 5;
+	width:500px;
+}
+sup {
+	font-size:70%;
+	color:red;
+	font-style:italic;
+	font-weight:bold;
+}
+.mono {
+	font-family:monospace;
+}
+.maxwide {
+	width:100%;
+}
+.r {
+	text-align:right;
+}
+.note {
+	font-size:13px;
+	font-style:italic;
+}
+.stat {
+	text-align:center;
+}
+</style>
+<table border="0" width="400"><tr><td>
+See <a href="chart.html" target="_blank">chart</a>.
+<i>
+Read <a href="https://bitcointalk.org/index.php?topic=60501" target="_blank">Goomboo's Journal</a>
+to learn about the strategy used by this trading bot.<br>
+The bot uses the first traded price of each hour for the EMA input.
+</i>
+<br><br>
+
+<table cellpadding="2" class="top">
+<form>
+<tr>
+ <td nowrap="nowrap">MtGox API Key<sup> 1</sup></td>
+ <td>
+	<input type="text" size="36" id="apikey" class="mono maxwide">
+ </td>
+</tr>
+
+<tr>
+ <td nowrap="nowrap">MtGox API Secret<sup> 1</sup></td>
+ <td>
+	<textarea id="apisec" cols="36" rows="3" class="mono maxwide"></textarea>
+ </td>
+</tr>
+
+<tr>
+ <td colspan="2">
+	<table width="100%"><tr>
+		<td align="center">EMA(<input type="text" size="2" maxlength="2" id="emas" class="mono r">)</td>
+		<td align="center">EMA(<input type="text" size="2" maxlength="2" id="emal" class="mono r">)</td>
+		<td align="center">sellTreshold=<input type="text" size="4" maxlength="4" id="stras" class="mono r">%<sup> 2</sup></td>
+		<td align="center">buyTreshold=<input type="text" size="4" maxlength="4" id="btras" class="mono r">%<sup> 2</sup></td>
+		<td align="center">Show last
+		<select id="sla">
+		<option value="6">6 hours</option>
+		<option value="12">12 hours</option>
+		<option value="24">1 day</option>
+		<option value="48">2 days</option>
+		<option value="72">3 days</option>
+		<option value="96">4 days</option>
+		<option value="120">5 days</option>
+		</select></td>
+	</tr></table>
+ </td>
+</tr>
+</tr>
+
+<tr>
+ <td colspan="2" align="center">
+  <input type="button" style="width:200px;" id="butres" value="Reset to defaults">
+  <input type="submit" style="width:200px;" id="butsav" value="Apply and save changes">
+ </td>
+</tr>
+</form>
+</table>
+ <hr>
+ <div class="note">
+ <sup>1</sup>
+ Take <b>API Key</b> and <b>Secret</b> from your MtGox account.
+ Use <b>Advanced API Key Creation</b> at
+ <a href="https://mtgox.com/security" target="_blank">Security Center</a> page
+ to create these values.
+ Make sure to grant only <b>get_info</b> and <b>trade</b> access rights for this API key.
+ The bot does not need you to be logged at the MtGox account
+ - just setup the Key&Secret, leave the browser running and it will trade...
+ <br><br>
+ <sup>2</sup>
+ The bot will buy or sell <u>all the bitcoins</u> at the given MtGox account
+ when the absolute difference between two EMA values (expressed in %)
+ holds above the <b>Threshold</b> for the last one tick (hours).
+ </div>
+
+ <hr><div class="note stat">
+ If you like this extension send <b>0.01</b>&nbsp;BTC to
+ <b>13g6zY7GJJvKEiYzTnGP8H9dEDEhYW2jFq</b>
+ </div>
+ <hr><div class="note stat">
+ If You like modifications made from original bot (https://chrome.google.com/webstore/detail/gox-trading-bot/)
+ send <b>0.01</b>&nbsp;BTC to
+ <b>13eJdr8ndc3MJAeHGpVTNMPUtTGE8ANHpL</b>
+ </div>
+</table>
+
+<script src="options.js"></script>
+>>>>>>> 128a303f8d47d895046c263db658cf957d5e3b82
