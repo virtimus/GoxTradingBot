@@ -3,6 +3,8 @@ GoxTradingBot
 
 Gox Trading Bot Chrome Extension
 
+<img src="http://i39.tinypic.com/34sf8rn.jpg"/>
+
 
 This work is based on Gox Trading Bot (https://chrome.google.com/webstore/detail/gox-trading-bot/iejmifigokhpcgpmoacllcdiceicmejb)
 
