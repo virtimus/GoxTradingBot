@@ -1,11 +1,13 @@
 const MaxHoursToKeep = 144;
-const btcOffset = 0; // this amount will be untouched by trade - bot will play with the rest
+const btcPreserve = 5; // this amount will be untouched by trade - bot will play with the rest
 const btcFiat = 'USD'; // change this to Your currency 
 // const TimeFrame = 1800;// interval as number of seconds (ie 3600 - 1 hour)
 const bidWithLastPrice = false; // use last price to bid rather than market one
 
 var ApiKey = localStorage.ApiKey || '';
 var ApiSec = localStorage.ApiSec || '';
+
+var tradingEnabled = (localStorage.tradingEnabled || 1);
 
 var EmaShortPar = parseInt(localStorage.EmaShortPar || 10);
 var EmaLongPar = parseInt(localStorage.EmaLongPar || 21);
@@ -156,23 +158,31 @@ function refreshEMA(reset) {
 		chrome.browserAction.setBadgeBackgroundColor({color:[0, 128, 0, 200]})
 		if (USD>=0.01) {
 			if (getemadif(H1.length-1) > MinThresholdBuy) {
+			if (tradingEnabled==1) {			
 				console.log("BUY!!!");
 				var inf = ['Currency='+btcFiat,'amount=1000'];
 				if (bidWithLastPrice) inf.push('price='+H1[H1.length-1].toString());
 				mtgoxpost("buyBTC.php", inf, one, onl)
+			} else {
+					console.log("BUY switched off! (EMA("+EmaShortPar+")/EMA("+EmaLongPar+")>"+MinThresholdBuy+"%");
+			}					
 			}
 		} else {
 			console.log("No "+btcFiat+" to exec up-trend")
 		}
 	} else if (dif<-MinThresholdSell) {
 		chrome.browserAction.setBadgeBackgroundColor({color:[128, 0, 0, 200]})
-		if (BTC>=btcOffset) {
-			var s = BTC - btcOffset;
+		if (BTC>=btcPreserve) {
+			var s = BTC - btcPreserve;
 			if (getemadif(H1.length-1) < -MinThresholdSell) {
+				if (tradingEnabled==1) {			
 				console.log("SELL!!!")
 				var inf = ['Currency='+btcFiat,'amount='+s.toString()];
 				if (bidWithLastPrice) inf.push('price='+H1[H1.length-1].toString());
 				mtgoxpost("sellBTC.php", inf , one, onl)
+				} else {
+					console.log("SELL switched off! (EMA("+EmaShortPar+")/EMA("+EmaLongPar+")<-"+MinSellThreshold+"%");
+				}				
 			}
 		} else {
 			console.log("No BTC to exec down-trend")

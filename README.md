@@ -23,18 +23,33 @@ There is no warranty of any kind that the source will perform according to any s
 Configuration:
 ---
 
-constants in file background.js:
+Constants in file background.js:
 
 	**MaxHoursToKeep** - how many bars are kept in history to calculate EMA trends
 
-	**btcOffset** - amount of BTC that shouldn't be touched by trade (all amount above that will be used)
+	**btcPreserve** - amount of BTC that shouldn't be touched by trade (all amount above that will be used)
  
 	**btcFiat** - replace with Your currency
 	
-	**hrInterval** - number of seconds between "ticks" (ie 3600 - one hour)
-	
 	**bidWithLastPrice** - bid with last price rather than market price
 
+
+Options to configure in run time:
+
+	**MtGox API Key** - API key from MtGox
+	 
+	**MtGox API Secret** - API secret from MtGox
+	
+	**EMAShort/EMALong** - EMA tick lengths
+	
+	**sellTreshold/buyTreshold** - sell/buy thresholds
+
+	**Show last x days** - how many days of history to present
+	 
+	**EMA Timeframe** - interval between ticks
+	
+	**Enable Trading** - switch between trade and simulation mode
+	 
 	
 Installation:
 ---
@@ -54,3 +69,9 @@ Changes:
 - option to bid with last price rather than market price ()
 - different thresholds buy/sell
 - other minor fixes
+
+0.2.0.3
+- hrInterval moved to dynamic (UI) options
+- "enableTrade" flag
+- minor layout fixes
+

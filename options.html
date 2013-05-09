@@ -55,11 +55,11 @@ The bot uses the first traded price of each hour for the EMA input.
 <tr>
  <td colspan="2">
 	<table width="100%"><tr>
-		<td align="center">EMA(<input type="text" size="2" maxlength="2" id="emas" class="mono r">)</td>
-		<td align="center">EMA(<input type="text" size="2" maxlength="2" id="emal" class="mono r">)</td>
-		<td align="center">sellTreshold=<input type="text" size="4" maxlength="4" id="stras" class="mono r">%<sup> 2</sup></td>
-		<td align="center">buyTreshold=<input type="text" size="4" maxlength="4" id="btras" class="mono r">%<sup> 2</sup></td>
-		<td align="center">Show last
+		<td align="center">EMAShort:<input type="text" size="2" maxlength="2" id="emas" class="mono r"></td>
+		<td align="center">EMALong:<input type="text" size="2" maxlength="2" id="emal" class="mono r"></td>
+		<td align="center">sellTreshold:<input type="text" size="4" maxlength="4" id="stras" class="mono r">%<sup> 2</sup></td>
+		<td align="center">buyTreshold:<input type="text" size="4" maxlength="4" id="btras" class="mono r">%<sup> 2</sup></td>
+		<td align="center">Show last:
 		<select id="sla">
 		<option value="6">6 hours</option>
 		<option value="12">12 hours</option>
@@ -79,6 +79,9 @@ The bot uses the first traded price of each hour for the EMA input.
 		<table width="100%">EMA Timeframe :  
 		<select id="tf">
 		<option value="3600">1 hour</option>
+		<option value="7200">2 hours</option>
+		<option value="10800">3 hours</option>
+		<option value="14400">4 hours</option>		
 		<option value="1800">30 minutes</option>
 		<option value="900">15 minutes</option>
 		<option value="300">5 minutes</option>
@@ -86,7 +89,9 @@ The bot uses the first traded price of each hour for the EMA input.
 		</table>
 	</td>
 </tr>
-
+					<tr>
+						<td colspan="2" nowrap="nowrap">Enable Trading:<input type="checkbox" value="true" id="tradingEnabled"> (Trade is off when unchecked)</td>
+					</tr>
 <tr>
  <td colspan="2" align="center">
   <input type="button" style="width:200px;" id="butres" value="Reset to defaults">

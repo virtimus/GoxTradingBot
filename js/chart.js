@@ -16,7 +16,7 @@ function processTradeData(emaLong, h1, emaShort, tim) {
 			if (h1.length > 1) {
 				var ss = new Date();
 				for (var i = 0; i < h1.length; i++) {
-					ss=new Date(tim[i]*bp.hrInterval*1000);//(new Date(bp.tim[i]*3600*1000)).getHours();// + ":00";
+					ss=new Date(tim[i]*bp.TimeFrame*1000);//(new Date(bp.tim[i]*3600*1000)).getHours();// + ":00";
 					
 					if (emaLong!=null){
 						data1.push([ss, parseFloat(emaLong[i])]);

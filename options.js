@@ -8,6 +8,9 @@ function rese() {
 	document.getElementById("emal").value=21
 	document.getElementById("btras").value=0.25
 	document.getElementById("stras").value=0.25
+	
+	document.getElementById("tradingEnabled").checked = true;
+	
 	sla.selectedIndex=1
 	tf.selectedIndex=0
 }
@@ -61,6 +64,9 @@ function save() {
 
 	localStorage.ApiKey=bp.ApiKey=document.getElementById("apikey").value
 	localStorage.ApiSec=bp.ApiSec=document.getElementById("apisec").value
+	
+	localStorage.tradingEnabled=bp.tradingEnabled=(document.getElementById("tradingEnabled").checked?1:0);	
+	
 	bp.schedupdate(10)
 
 	localStorage.LogLines=bp.LogLines=parseInt(sla.value)
@@ -80,6 +86,9 @@ function setfields() {
 	document.getElementById("emal").value=bp.EmaLongPar.toString()
 	document.getElementById("btras").value=bp.MinThresholdBuy.toFixed(2)
 	document.getElementById("stras").value=bp.MinThresholdSell.toFixed(2)
+
+	document.getElementById("tradingEnabled").checked=(bp.tradingEnabled==1);	
+	
 	for (var i=0; i<sla.options.length; i++) {
 		if (parseInt(sla.options[i].value)==bp.LogLines) {
 			sla.selectedIndex=i

@@ -14,5 +14,5 @@
 	"name": "Gox Trading Bot",
 	"options_page": "options.html",
 	"permissions": [ "https://mtgox.com/", "https://data.mtgox.com/", "https://vircurex.com/" ],
-	"version": "0.2.0.2"
+	"version": "0.2.0.3"
 }
