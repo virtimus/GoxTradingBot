@@ -75,3 +75,7 @@ Changes:
 - "enableTrade" flag
 - minor layout fixes
 
+0.2.0.4
+- added history data, gui fixes
+
+

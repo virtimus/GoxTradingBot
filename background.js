@@ -27,6 +27,7 @@ var emaLong = [];
 var emaShort = [];
 
 var popupRefresh=null;
+var popupUpdateCounter=null;
 var updateinprogress=false;
 
 
@@ -93,6 +94,46 @@ function mtgoxpost(page, params, ef, df) {
 	for (var i in params)  data += "&" + params[i]
 	data = encodeURI(data)
 	var hmac = signdata(data)
+	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+	req.setRequestHeader("Rest-Key", ApiKey)
+	req.setRequestHeader("Rest-Sign", hmac)
+	req.send(data)
+}
+
+function mtgoxpost1(page, params, ef, df) {
+	var req = new XMLHttpRequest()
+	req.open("POST", "https://mtgox.com/api/1/"+page, true)
+	req.onerror = ef
+	req.onload = df
+	var data = "nonce="+((new Date()).getTime()*1000)
+	for (var i in params)  data += "&" + params[i]
+	data = encodeURI(data)
+	var hmac = signdata(data)
+	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+	req.setRequestHeader("Rest-Key", ApiKey)
+	req.setRequestHeader("Rest-Sign", hmac)
+	req.send(data)
+}
+
+
+function hmac_512(message) {
+    var secret = atob(ApiSec);
+    var shaObj = new jsSHA(message, "TEXT");
+    var hmac = shaObj.getHMAC(secret, "B64", "SHA-512", "B64");
+    return hmac
+}
+
+function mtgoxpost2(page, params, ef, df) {
+	var req = new XMLHttpRequest()
+	req.open("POST", "https://mtgox.com/api/2/"+page, true)
+	req.onerror = ef
+	req.onload = df
+	var data = 'nonce='+((new Date()).getTime()*1000);
+	for (var i in params)  data += "&" + params[i];
+	data = encodeURI(data);
+	data = page + '\x00' + data;
+	var hmac = hmac_512(data)
+	//var hmac = signdata(data)
 	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
 	req.setRequestHeader("Rest-Key", ApiKey)
 	req.setRequestHeader("Rest-Sign", hmac)
@@ -266,6 +307,12 @@ function updateH1() {
 			} catch (e) {
 				popupRefresh=null
 			}
+		} else if (popupUpdateCounter!=null) {
+			try {
+				popupUpdateCounter();
+			} catch (e) {
+				popupUpdateCounter=null;
+			}				
 		}
 	}
 	get_url(req, url)

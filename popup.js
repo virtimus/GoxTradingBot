@@ -14,7 +14,18 @@ function refreshtable() {
 	var tab = document.getElementById("tab")
 	document.getElementById("emal").innerHTML=bp.EmaLongPar
 	document.getElementById("emas").innerHTML=bp.EmaShortPar
-	while (tab.rows.length>3) tab.deleteRow(1)
+	while (tab.rows.length>5) tab.deleteRow(1)
+	
+	if (bp.updateinprogress) { // && bp.H1.length>bp.LogLines) {
+		var r=tab.insertRow(4);
+		var c=r.insertCell(-1);
+		c.colSpan=5;
+		c.innerHTML="&nbsp;<br>Fetching trading data - please wait...<br>("+bp.H1.length+" of "+bp.MaxHoursToKeep+" samples loaded)<br>&nbsp;";
+		c.style.backgroundColor="#FFFFFF";
+		c.style.textAlign="center";
+		c.id="loadCell";
+	}		
+	
 	if (!bp.updateinprogress && bp.H1.length>bp.LogLines) {
 		if (bp.H1.length>bp.emaLong.length){
 			bp.refreshEMA(true);
@@ -28,7 +39,7 @@ function refreshtable() {
 			if ((es + el)>0) {	
 			   perc = 100 * (es-el) / ((es+el)/2)
 			}
-			var r=tab.insertRow(3)
+			var r=tab.insertRow(5)
 			var ti=new Date(bp.tim[i]*bp.TimeFrame*1000)
 				//   new Date(bp.tim[i]*3600*1000)
 			r.style.backgroundColor=bcols[((bp.tim[i]+1)/24)&1]
@@ -40,11 +51,11 @@ function refreshtable() {
 			if (hrss.length<2) hrss = '0'+hrss;
 			
 			r.insertCell(-1).innerHTML= hrss + ":"+ mnts; 
-			r.insertCell(-1).innerHTML=bp.H1[i].toFixed(3)
-			r.insertCell(-1).innerHTML=es.toFixed(3)
-			r.insertCell(-1).innerHTML=el.toFixed(3)
+			r.insertCell(-1).innerHTML=bp.H1[i].toFixed(4)
+			r.insertCell(-1).innerHTML=es.toFixed(4)
+			r.insertCell(-1).innerHTML=el.toFixed(4)
 			var c=r.insertCell(-1)
-			c.innerHTML=perc.toFixed(3)+'%'
+			c.innerHTML=perc.toFixed(4)+'%'
 			if (perc>bp.MinThresholdBuy || perc<-bp.MinThresholdSell) {
 				c.style.backgroundColor = perc<0 ? "#ffd0d0" : "#d0ffd0"
 			} else {
@@ -65,6 +76,16 @@ function refreshtable() {
 	}
 }
 
+
+function popupUpdateCounter() {
+	var o=document.getElementById("loadCell");
+	if (o) {
+		o.innerHTML="&nbsp;<br>Fetching trading data - please wait...<br>("+bp.H1.length+" of "+bp.MaxHoursToKeep+" samples loaded)<br>&nbsp;";
+	}
+	//redrawChart();
+}
+
 document.getElementById("hrRefresh").onclick=hrRefreshOnClick;
-refreshtable()
-bp.popupRefresh=refreshtable
+refreshtable();
+bp.popupRefresh=refreshtable;
+bp.popupUpdateCounter=popupUpdateCounter;
