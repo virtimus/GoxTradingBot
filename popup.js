@@ -14,6 +14,9 @@ function refreshtable() {
 	var tab = document.getElementById("tab")
 	document.getElementById("emal").innerHTML=bp.EmaLongPar
 	document.getElementById("emas").innerHTML=bp.EmaShortPar
+	
+	document.getElementById("tradingStatus").innerHTML=(bp.tradingEnabled==1?"<span style=\"color:#008000\"><b>Trading is enabled</b></span><br>":"<span style=\"color:#A00000\"><b>Trading is disabled</b></span><br>");
+	
 	while (tab.rows.length>5) tab.deleteRow(1)
 	
 	if (bp.updateinprogress) { // && bp.H1.length>bp.LogLines) {

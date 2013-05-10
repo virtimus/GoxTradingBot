@@ -166,6 +166,8 @@ function processTradeData(emaLong, h1, emaShort, tim) {
 						if (rdo.result == "success") {
 							var recNum = parseInt(rdo.return.records);
 							var tab = document.getElementById("tab");
+							tab.style.display="inline";
+							while (tab.rows.length>1) tab.deleteRow(1)
 							for (var i=0; i<recNum; i++) {
 								var res = rdo.return.result[i];//
 								//.Index;
@@ -197,6 +199,8 @@ function processTradeData(emaLong, h1, emaShort, tim) {
 
         $(document).ready(function () {
 
-			showTrades();			
-			showTradesHist();
+			showTrades();
+			var hrefHist = document.getElementById("hrefHistory");	
+		    hrefHist.onclick = showTradesHist;			
+			//showTradesHist();
         });

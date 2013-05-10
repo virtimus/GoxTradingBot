@@ -1,63 +1,29 @@
 <html>
 <head>
 <style>
-body {margin: 5px; padding: 0px}
 div {
 	overflow:auto;
 	width:315px;
 	max-height:500px;
 }
-table {
-	border-width: 1px;
-	border-spacing: 2px;
-	border-style: outset;
-	border-color: gray;
-	border-collapse:collapse;
-	background-color: white;
-	font-size: 14px;
-	width: 100%;
-}
-th {
-	white-space: nowrap;
-	text-align: center;
-	background-color: black;
-	color: white;
-}
-td {
-	white-space: nowrap;
-	text-align: right;
-	width: 50px;
-	padding-right: 3px;
-}
-td.c {
-	text-align: center;
-	background-color: #d0d0d0;
-	color: blue;
-}
-td.d {
-	padding:4px 0 ;
-	text-align: center;
-	background-color: #d0d0d0;
-	color: black;
-	font-size:12px;	
-}
-td.err {
-	text-align: center;
-	background-color: #e0e0ff;
-	color: red;
-}
 </style>
+<link rel="stylesheet" type="text/css" href="css/table.css" />
 </head>
 <body>
 <div>
 <table id="tab" cellpadding="1" cellspacing="0" border="1">
 		<tr id="settings">
 			<th class="d" colspan="5">
-				<span id="tradingStatus"></span>
+				
 			</th>
 		</tr>
 		<tr id="settings">
-			<th class="d" colspan="5"/>
+			<th class="d">
+				<a href="options.html" id="hrOptions"><img src="img/options.png" alt="See options"/></a>
+			</th>
+			<th class="d" colspan="4">
+			<span id="tradingStatus"></span>
+			</th>
 		</tr>	
 
 
