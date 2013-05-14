@@ -8,6 +8,9 @@ function rese() {
 	document.getElementById("emal").value=21
 	document.getElementById("btras").value=0.25
 	document.getElementById("stras").value=0.25
+	document.getElementById("bsTrigSell").value=0;
+	document.getElementById("bsTrigBuy").value=0;
+	//document.getElementById("bsTrig2").value=0;
 	
 	document.getElementById("tradingEnabled").checked = true;
 	
@@ -66,6 +69,8 @@ function save() {
 	localStorage.ApiSec=bp.ApiSec=document.getElementById("apisec").value
 	
 	localStorage.tradingEnabled=bp.tradingEnabled=(document.getElementById("tradingEnabled").checked?1:0);	
+	localStorage.bsTrigSell=bp.bsTrigSell=parseInt(document.getElementById("bsTrigSell").value);
+	localStorage.bsTrigBuy=bp.bsTrigBuy=parseInt(document.getElementById("bsTrigBuy").value);
 	
 	bp.schedupdate(10)
 
@@ -74,8 +79,8 @@ function save() {
 
 	localStorage.EmaShortPar=bp.EmaShortPar=es
 	localStorage.EmaLongPar=bp.EmaLongPar=el
-	localStorage.MinThreshold=bp.MinThresholdBuy=btr
-	localStorage.MinThreshold=bp.MinThresholdSell=str
+	localStorage.MinThresholdBuy=bp.MinThresholdBuy=btr
+	localStorage.MinThresholdSell=bp.MinThresholdSell=str
 	bp.refreshEMA(true)
 }
 
@@ -86,8 +91,16 @@ function setfields() {
 	document.getElementById("emal").value=bp.EmaLongPar.toString()
 	document.getElementById("btras").value=bp.MinThresholdBuy.toFixed(2)
 	document.getElementById("stras").value=bp.MinThresholdSell.toFixed(2)
+	document.getElementById("bsTrigSell").value = bp.bsTrigSell.toString();
+	document.getElementById("bsTrigBuy").value = bp.bsTrigBuy.toString();
+	
 
-	document.getElementById("tradingEnabled").checked=(bp.tradingEnabled==1);	
+	document.getElementById("tradingEnabled").checked=(bp.tradingEnabled==1);
+	document.getElementById("btcPreserve").innerHTML = "<strong>"+bp.btcPreserve+"</strong> BTC&nbsp;";
+	document.getElementById("btcAmountPreserved").innerHTML  = "" + bp.btcPreserve;
+	document.getElementById("MaxHoursToKeep").innerHTML  = "" + bp.MaxHoursToKeep;
+	document.getElementById("btcFiat").innerHTML  = "" + bp.btcFiat;
+	
 	
 	for (var i=0; i<sla.options.length; i++) {
 		if (parseInt(sla.options[i].value)==bp.LogLines) {

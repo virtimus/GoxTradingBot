@@ -8,6 +8,8 @@ var ApiKey = localStorage.ApiKey || '';
 var ApiSec = localStorage.ApiSec || '';
 
 var tradingEnabled = (localStorage.tradingEnabled || 1);
+var bsTrigSell = (localStorage.bsTrigSell || 0);
+var bsTrigBuy = (localStorage.bsTrigBuy || 0);
 
 var EmaShortPar = parseInt(localStorage.EmaShortPar || 10);
 var EmaLongPar = parseInt(localStorage.EmaLongPar || 21);
@@ -47,34 +49,6 @@ function schedupdate(t) {
 	utimer = setTimeout(update,t)
 }
 
-function update() {
-	mtgoxpost("info.php", [],
-		function(e) {
-			console.log("info error", e)
-			chrome.browserAction.setTitle({title: "Error executing info" });
-			schedupdate(10*1000) // retry after 10 seconds
-		},
-		function(d) {
-			console.log("info.php", d.currentTarget.responseText)
-			BTC = Number.NaN
-			USD = Number.NaN
-			try {
-				var rr = JSON.parse(d.currentTarget.responseText)
-				if (typeof(rr.Wallets[btcFiat].Balance.value)=="undefined") {
-					chrome.browserAction.setTitle({title: rr.error });
-				} else {
-					BTC = parseFloat(rr.Wallets.BTC.Balance.value)
-					USD = parseFloat(rr.Wallets[btcFiat].Balance.value)
-					chrome.browserAction.setTitle({title: (rr.Wallets.BTC.Balance.value + " BTC + " + rr.Wallets[btcFiat].Balance.value + " " + btcFiat) });
-				}
-			} catch (e) {
-				console.log(e)
-				chrome.browserAction.setTitle({title: e.toString() });
-			}
-			schedupdate(5*60*1000) // Update balance every 5 minutes
-		}
-	)
-}
 
 function signdata(data) {
 	var shaObj = new jsSHA(data, "ASCII")
@@ -174,6 +148,121 @@ function getemadif(idx) {
 	return 100 * (ces-cel) / ((ces+cel)/2)
 }
 
+function extractPrice(sfrom){
+var n=sfrom.indexOf("BTC at");
+n+=6;
+var ret = -1;
+var s2 = sfrom.substr(n);
+var s3 = "";
+for (var i=0; i<s2.length; i++) {
+	if (((s2.charAt(i)>='0') && (s2.charAt(i)<='9')) || (s2.charAt(i)=='.')){
+		s3 = s3 + s2.charAt(i);
+		}
+	}
+ret = parseFloat(s3);
+return ret;
+}
+
+function getWalletHistory(fonret,fonerr){
+
+				//var inf = ["nonce="+((new Date()).getTime()*1000),'currency=BTC',"nonce="+((new Date()).getTime()*1000)];//['since='+btcFiat,'amount=1000'];
+				var inf = ['currency=BTC'];//['since='+btcFiat,'amount=1000'];
+				//if (bidWithLastPrice) inf.push('price='+H1[H1.length-1].toString());				
+				
+				mtgoxpost1("generic/wallet/history", inf, 				
+					function one(e) {
+						console.log("ajax post error", e)
+						if (fonerr!=null) fonerr(e);
+						}, 
+					function onl(d) {
+						console.log("ajax post ok", d);
+						var rdo = JSON.parse(d.srcElement.responseText);
+						if (rdo.result == "success") {
+							fonret(rdo);
+							}
+						else {
+							console.log("ERROR geting wallet history");
+						}	
+						//schedupdate(2500);
+						}
+					);
+
+
+}
+
+function checkIfToTrade(stype,func){
+
+		var bInProgress =true;
+		getWalletHistory(function(rdo){
+			
+							var recNum = parseInt(rdo.return.records);
+							for (var i=0; i<recNum; i++) {
+								var res = rdo.return.result[i];//
+								if (res.Type == stype) {// find first "stype" transaction
+									var prevPrice = extractPrice(res.Info);
+									var currPrice = H1[(H1.length-1)];
+									var k=(stype=='in')?1:-1;
+									var bsTrig = (stype=='in')?bsTrigSell:bsTrigBuy;
+									if (prevPrice>0)
+									if (((currPrice-prevPrice)*k/prevPrice) > (bsTrig/100)) {//trigger trade
+										func();
+									}
+									i=recNum;//end of loop
+								}
+								}				
+				bInProgress = false;
+			},
+			function(e){
+				bInProgress = false;
+			}
+			);
+
+}
+
+function checkIfToBuy(dif,func){
+var bBuy = false;
+		if (USD>=0.01) {
+			if (getemadif(H1.length-1) > MinThresholdBuy) {
+			if (tradingEnabled==1) {			
+					bBuy = true;
+			} else {
+					console.log("BUY switched off! (EMA("+EmaShortPar+")/EMA("+EmaLongPar+")>"+MinThresholdBuy+"%");
+			}					
+			}
+		} else {
+			console.log("No "+btcFiat+" to exec up-trend")
+		}
+	if (bBuy &&( bsTrigBuy>0)){// check yet history
+		bBuy = false;
+		checkIfToTrade("out",func);
+	}	
+		
+	return bBuy;
+}
+
+function checkIfToSell(dif,func){
+	var bSell = false;	
+		if (BTC>=btcPreserve) {
+			var s = BTC - btcPreserve;
+			if (getemadif(H1.length-1) < -MinThresholdSell) {
+				if (tradingEnabled==1) {			
+					bSell = true;	
+				} else {
+					console.log("SELL switched off! (EMA("+EmaShortPar+")/EMA("+EmaLongPar+")<-"+MinSellThreshold+"%");
+				}				
+			}
+		} else {
+			console.log("No BTC to exec down-trend")
+		}
+	if (bSell &&( bsTrigSell>0)){// check yet history
+		bSell =false;
+		checkIfToTrade("in",func);
+	}
+
+	return bSell;
+
+}
+
 
 function refreshEMA(reset) {
 	if (reset) {
@@ -197,37 +286,31 @@ function refreshEMA(reset) {
 
 	if (dif>MinThresholdBuy) {
 		chrome.browserAction.setBadgeBackgroundColor({color:[0, 128, 0, 200]})
-		if (USD>=0.01) {
-			if (getemadif(H1.length-1) > MinThresholdBuy) {
-			if (tradingEnabled==1) {			
+		if (checkIfToBuy(dif,function(){
+				if (tradingEnabled==1){
 				console.log("BUY!!!");
 				var inf = ['Currency='+btcFiat,'amount=1000'];
 				if (bidWithLastPrice) inf.push('price='+H1[H1.length-1].toString());
 				mtgoxpost("buyBTC.php", inf, one, onl)
-			} else {
-					console.log("BUY switched off! (EMA("+EmaShortPar+")/EMA("+EmaLongPar+")>"+MinThresholdBuy+"%");
-			}					
-			}
-		} else {
-			console.log("No "+btcFiat+" to exec up-trend")
+				}
+		})) {
+
 		}
+
+		
 	} else if (dif<-MinThresholdSell) {
 		chrome.browserAction.setBadgeBackgroundColor({color:[128, 0, 0, 200]})
-		if (BTC>=btcPreserve) {
-			var s = BTC - btcPreserve;
-			if (getemadif(H1.length-1) < -MinThresholdSell) {
-				if (tradingEnabled==1) {			
+		if (checkIfToSell(dif,function(){
+				if (tradingEnabled==1){
 				console.log("SELL!!!")
 				var inf = ['Currency='+btcFiat,'amount='+s.toString()];
 				if (bidWithLastPrice) inf.push('price='+H1[H1.length-1].toString());
-				mtgoxpost("sellBTC.php", inf , one, onl)
-				} else {
-					console.log("SELL switched off! (EMA("+EmaShortPar+")/EMA("+EmaLongPar+")<-"+MinSellThreshold+"%");
-				}				
-			}
-		} else {
-			console.log("No BTC to exec down-trend")
+				mtgoxpost("sellBTC.php", inf , one, onl)		
+				}
+		})) {
+		
 		}
+
 	} else {
 		if (dif>0) {
 			chrome.browserAction.setBadgeBackgroundColor({color:[10, 100, 10, 100]})

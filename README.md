@@ -31,7 +31,7 @@ Constants in file background.js:
  
 	**btcFiat** - replace with Your currency
 	
-	**bidWithLastPrice** - bid with last price rather than market price
+	**bidWithLastPrice** - bid with last price rather than market price (poorly tested - for now effects in "dead" orders)
 
 
 Options to configure in run time:
@@ -45,11 +45,16 @@ Options to configure in run time:
 	**sellTreshold/buyTreshold** - sell/buy thresholds
 
 	**Show last x days** - how many days of history to present
-	 
-	**EMA Timeframe** - interval between ticks
 	
 	**Enable Trading** - switch between trade and simulation mode
 	 
+	**EMA Timeframe** - interval between ticks
+	
+	**Last Buy to Sell trigger** - difference in price to keep when selling BTC (comparing to wallet history)
+
+	**Last Sell to Buy trigger** - same as above when buying BTC ("sold price" to "bought price" relation,"0" means no difference keeping)
+	
+		 
 	
 Installation:
 ---
@@ -57,7 +62,7 @@ Installation:
 1. Copy files from github to Your local storage.
 2. Configure background.js according to above specs
 3. Run Chrome and goto "chrome://extensions/" url
-4. Click on "Read extension without package" and choose Your local folder
+4. Click on (developer mode) "Read extension without package" and choose Your local folder
 
 
 Changes:
@@ -78,4 +83,11 @@ Changes:
 0.2.0.4
 - added history data, gui fixes
 
+0.2.0.5 
+- added balance check using v1 api
+- added buy/sell difference keeper
+- other minor fixes
 
+Wanna feature? Donations:
+---
+BTC:13eJdr8ndc3MJAeHGpVTNMPUtTGE8ANHpL

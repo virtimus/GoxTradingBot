@@ -71,7 +71,7 @@ function processTradeData(emaLong, h1, emaShort, tim) {
   						    type: 'dateTime',
 							interval: 1,
 							intervalType: 'hours',
-							labels: { stringFormat: 'hh:MM' },//mm/dd 
+							labels: { stringFormat: 'HH:MM' },//mm/dd 
                             location: 'bottom',
                             zoomEnabled: true
                         }
@@ -151,19 +151,10 @@ function processTradeData(emaLong, h1, emaShort, tim) {
 		}
 		
 		function showTradesHist(){
-				//var inf = ["nonce="+((new Date()).getTime()*1000),'currency=BTC',"nonce="+((new Date()).getTime()*1000)];//['since='+btcFiat,'amount=1000'];
-				var inf = ['currency=BTC'];//['since='+btcFiat,'amount=1000'];
-				//if (bidWithLastPrice) inf.push('price='+H1[H1.length-1].toString());
-				
-				
-				bp.mtgoxpost1("generic/wallet/history", inf, 				
-					function one(e) {
-						console.log("ajax post error", e)
-						}, 
-					function onl(d) {
-						console.log("ajax post ok", d);
-						var rdo = JSON.parse(d.srcElement.responseText);
-						if (rdo.result == "success") {
+				console.log("showTradesHist");
+
+				bp.getWalletHistory(function(rdo){
+
 							var recNum = parseInt(rdo.return.records);
 							var tab = document.getElementById("tab");
 							tab.style.display="inline";
@@ -171,8 +162,8 @@ function processTradeData(emaLong, h1, emaShort, tim) {
 							for (var i=0; i<recNum; i++) {
 								var res = rdo.return.result[i];//
 								//.Index;
-							var d=new Date(res.Date*1000);
-							var dateStr=d.getFullYear()+"-"+padit(d.getMonth()+1)+"-"+padit(d.getDate())+" "+padit(d.getHours())+":"+padit(d.getMinutes()) ;								
+								var d=new Date(res.Date*1000);
+								var dateStr=d.getFullYear()+"-"+padit(d.getMonth()+1)+"-"+padit(d.getDate())+" "+padit(d.getHours())+":"+padit(d.getMinutes()) ;								
 								var r=tab.insertRow(1+i);
 								r.insertCell(-1).innerHTML = ""+ res.Index; 
 								r.insertCell(-1).innerHTML = ""+ dateStr;
@@ -180,11 +171,11 @@ function processTradeData(emaLong, h1, emaShort, tim) {
 								r.insertCell(-1).innerHTML = ""+ res.Value.display; 
 								r.insertCell(-1).innerHTML = ""+ res.Balance.display; 
 								r.insertCell(-1).innerHTML = ""+ res.Info; 
-								}
-							}
-						//schedupdate(2500);
-						}
-					);
+								}				
+				
+				},null);
+				
+
 		}
 
 	

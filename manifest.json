@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"background": {
-		"scripts": ["sha512.js", "background.js"]
+		"scripts": ["sha512.js", "api/mtgox1.js", "background.js"]
 	},
 	"browser_action": {
 		"default_icon": "icon.gif",
@@ -14,5 +14,5 @@
 	"name": "Gox Trading Bot",
 	"options_page": "options.html",
 	"permissions": [ "https://mtgox.com/", "https://data.mtgox.com/", "https://vircurex.com/" ],
-	"version": "0.2.0.4"
+	"version": "0.2.0.5"
 }

@@ -73,8 +73,11 @@ The bot uses the first traded price of each hour for the EMA input.
  </td>
 </tr>
 </tr>
-
+					<tr>
+						<td colspan="2" nowrap="nowrap"><strong>Enable Trading:<input type="checkbox" value="true" id="tradingEnabled"> (Trade is off when unchecked)</strong></td>
+					</tr>
 <tr>
+	
 	<td>
 		<table width="100%">EMA Timeframe :  
 		<select id="tf">
@@ -88,16 +91,31 @@ The bot uses the first traded price of each hour for the EMA input.
 		</select>
 		</table>
 	</td>
+	<td>
+		<table width="100%">Last Buy to Sell trigger:  
+		<input type="text" size="4" maxlength="4" id="bsTrigSell" class="mono r">%<sup> 3</sup><br/>
+		Last Sell to Buy trigger:  
+		<input type="text" size="4" maxlength="4" id="bsTrigBuy" class="mono r">%<sup> 3</sup><br/>
+		</table>	
+	</td>	
 </tr>
-					<tr>
-						<td colspan="2" nowrap="nowrap">Enable Trading:<input type="checkbox" value="true" id="tradingEnabled"> (Trade is off when unchecked)</td>
-					</tr>
 <tr>
  <td colspan="2" align="center">
   <input type="button" style="width:200px;" id="butres" value="Reset to defaults">
   <input type="submit" style="width:200px;" id="butsav" value="Apply and save changes">
  </td>
 </tr>
+<tr>
+ <td colspan="2" align="left">
+	<strong>background.js constants:</strong><br/>
+	<div style="width:100%;text-align:right">
+	btcAmountPreserved:&nbsp;<strong><span id="btcAmountPreserved"></span></strong> BTC <br/>
+	MaxHoursToKeep:&nbsp;<strong><span id="MaxHoursToKeep"></span></strong><br/>
+	btcFiat:&nbsp;<strong><span id="btcFiat"></strong></span><br/>
+	</div>
+	
+ </td>
+</tr> 
 </form>
 </table>
  <hr>
@@ -112,20 +130,27 @@ The bot uses the first traded price of each hour for the EMA input.
  - just setup the Key&Secret, leave the browser running and it will trade...
  <br><br>
  <sup>2</sup>
- The bot will buy or sell <u>all the bitcoins</u> at the given MtGox account
- when the absolute difference between two EMA values (expressed in %)
+ The bot will buy or sell <u>all BTC above amount <span id="btcPreserve"></span></u>(preconfigured in file background.js) at the given MtGox account when the absolute difference between two EMA values (expressed in %)
  holds above the <b>Threshold</b> for the last one tick (hours).
+ <br><br>
+ <sup>3</sup>
+ The bot will preserve loses by keeping last wallet state (not trading) in case buy/sell difference from last trade is less than given %. 
+ <strong>0%</strong> means preserving loses is not active. 
  </div>
-
+ 
+ <hr><div class="note stat">
+ <a href="https://chrome.google.com/webstore/detail/gox-trading-bot/">original bot</a>
+ </div>
+ <hr><div class="note stat">
+ If You like modifications made from original bot 
+ send <b>0.01</b>&nbsp;BTC to
+ <b>13eJdr8ndc3MJAeHGpVTNMPUtTGE8ANHpL</b>
+ </div>
  <hr><div class="note stat">
  If you like this extension send <b>0.01</b>&nbsp;BTC to
  <b>13g6zY7GJJvKEiYzTnGP8H9dEDEhYW2jFq</b>
  </div>
- <hr><div class="note stat">
- If You like modifications made from original bot (https://chrome.google.com/webstore/detail/gox-trading-bot/)
- send <b>0.01</b>&nbsp;BTC to
- <b>13eJdr8ndc3MJAeHGpVTNMPUtTGE8ANHpL</b>
- </div>
+
 </table>
 
 <script src="options.js"></script>
